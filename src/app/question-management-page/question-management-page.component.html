@@ -1,26 +1,33 @@
-<div>
-    <div>
-        <h2>Question Management Page</h2>
+<div fxLayout="column" fxLayoutGap="1em">
+    <div fxLayout="row">
+        <span style="margin-left: 1em; margin-top: 2em;font-size: large;">Question Management Page</span>
     </div>
     <div>
-        <button routerLink="create" mat-flat-button>Create</button>
+        <hr style="margin-left: 1em; margin-right: 1em;">
     </div>
-    <div *ngIf="data.Questions && data.Questions.length > 0; else noQuestions">
-        <table>
+    <div>
+        <button routerLink="/create" mat-raised-button style="margin-left: 1em;" color="accent">Create</button>
+        <button routerLink="/answer" mat-raised-button style="margin-left: 1em;" color="primary">Answer</button>
+        <button mat-raised-button style="margin-left: 1em;" color="warn" (click)="clear()">Clear</button>
+    </div>
+    <div *ngIf="data.Questions && data.Questions.length > 0; else noQuestions" fxLayout="column">
+        <table style="margin-left: 1em; margin-right: 1em">
             <thead>
-                <th>Question</th>
-                <th>Type</th>
-                <th>Create date</th>
-                <th></th>
+                <tr style="text-align: left;">
+                    <th>Question</th>
+                    <th>Type</th>
+                    <th>Create date</th>
+                    <th></th>
+                </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item in data.Questions">
+                <tr *ngFor="let item of sortedByCreateDate()">
                     <td>{{item.Question}}</td>
-                    <td>{{item.Type}}</td>
-                    <td>{{item.Answer}}</td>
+                    <td>{{item.Type | eQuestionTypesPipe}}</td>
+                    <td>{{item.CD | date:'medium'}}</td>
                     <td>
                         <div>
-                            <button (click)="edit(item)">Edit</button>
+                            <button routerLink="/edit" [queryParams]="{ id: item.Id }">Edit</button>
                             <button (click)="delete(item)">Delete</button>
                         </div>
                     </td>
@@ -30,7 +37,9 @@
     </div>
 </div>
 <ng-template #noQuestions>
-    <h3>
-        Create your first question!
-    </h3>
+    <div>
+        <h3 style="margin-left: 1em;">
+            Create your first question!
+        </h3>
+    </div>
 </ng-template>

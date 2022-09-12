@@ -1,1 +1,75 @@
-<p>question-answer-page works!</p>
+<div fxLayout="column" fxLayoutGap="1em">
+    <div fxLayout="row">
+        <span style="margin-left: 1em; margin-top: 2em;font-size: large;">List Question Page</span>
+    </div>
+    <div>
+        <hr style="margin-left: 1em; margin-right: 1em;">
+    </div>
+    <div>
+        <button routerLink="/" mat-raised-button style="margin-left: 1em;" color="primary">Question Management
+            Page</button>
+    </div>
+    <div *ngIf="data.Questions && data.Questions.length > 0; else noQuestions" fxLayout="row">
+        <div fxFlex fxLayout="column" fxLayoutGap="1em" style="margin: 1em;">
+            <div> Unanswered Questions </div>
+            <div *ngFor="let item of data.UnansweredQuestions">
+                <mat-card>
+                    <mat-card-subtitle>{{item.Type | eQuestionTypesPipe}} created in {{item.CD | date:"medium"}}
+                    </mat-card-subtitle>
+                    <mat-card-content>
+                        <div>{{item.Question}}</div>
+                        <div *ngIf="item.Type == 1">
+                            <mat-radio-group fxLayout="column" fxLayoutGap="0.5em"
+                                (change)="userSingleAnswer(item, $event)">
+                                <mat-radio-button *ngFor="let answer of  item.AvalibleAnswers" [value]="answer">
+                                    {{answer.Text}}
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                        <div *ngIf="item.Type == 2" fxLayout="column">
+                            <mat-checkbox *ngFor="let answer of  item.AvalibleAnswers"
+                                (change)="userMultiAnswer(item,answer, $event)">{{answer.Text}}</mat-checkbox>
+                        </div>
+                        <div *ngIf="item.Type == 3" fxLayout="column">
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <mat-label>Your answer</mat-label>
+                                <input matInput (input)="userOpenAnswer(item, $event)">
+                            </mat-form-field>
+                        </div>
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <button mat-raised-button (click)="answer(item)" [disabled]="!isCorrect(item)">Answer now</button>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+        </div>
+        <div fxFlex fxLayout="column" fxLayoutGap="1em" style="margin: 1em;">
+            <div>Answered Questions</div>
+            <div *ngFor="let item of sortedByAnswerDate()">
+                <mat-card>
+                    <mat-card-subtitle>{{item.Type | eQuestionTypesPipe}} in {{item.AD | date:"medium"}}
+                    </mat-card-subtitle>
+                    <mat-card-content>
+                        <div>{{item.Question}}</div>
+                        <div>Your answers</div>
+                        <div *ngFor="let answer of item.SelectedAnswers" style="margin-left: 1em;">
+                            <span>{{answer.Text}}</span>
+                            <span style="margin-left: 1em; color: green;" *ngIf="answer.IsRight && item.Type != 3">Correct</span>
+                            <span style="margin-left: 1em; color: red;" *ngIf="!answer.IsRight && item.Type != 3">Incorrect</span>
+                        </div>
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <button mat-raised-button (click)="reanswer(item)">Try again</button>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #noQuestions>
+    <div>
+        <h3 style="margin-left: 1em;">
+            Create your first question!
+        </h3>
+    </div>
+</ng-template>

@@ -1,1 +1,61 @@
-<p>question-create-page works!</p>
+<div fxLayout="column" fxLayoutGap="1em">
+    <div fxLayout="row">
+        <span style="margin-left: 1em; margin-top: 2em;font-size: large;">Question Create Page</span>
+    </div>
+    <div>
+        <hr style="margin-left: 1em; margin-right: 1em;">
+    </div>
+    <div fxLayout="row">
+        <mat-card style="margin-left: 1em; margin-right: 1em;">
+            <mat-card-content>
+                <div>
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Question</mat-label>
+                        <input matInput required minlength="1" maxlength="256" [(ngModel)]="question">
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="type" fxLayout="column"
+                        fxLayoutGap="0.5em">
+                        <mat-radio-button *ngFor="let item of types()" [value]="item">{{item | eQuestionTypesPipe}}
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <!-- <mat-form-field appearance="fill">
+                            <mat-label>Type</mat-label>
+                            <mat-select [(ngModel)]="type">
+                                <mat-option *ngFor="let item of types()" [value]="item">
+                                    {{typesDisplay[item]}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        {{type|json}} -->
+                </div>
+                <div *ngIf="type == 1 || type == 2">
+                    <mat-card>
+                        <mat-card-subtitle>Answers</mat-card-subtitle>
+                        <mat-card-content>
+                            <div>
+                                <div *ngFor="let item of answers">
+                                    <mat-form-field class="example-full-width" appearance="fill">
+                                        <mat-label>Answer</mat-label>
+                                        <input matInput [(ngModel)]="item.Text">
+                                    </mat-form-field>
+                                    <mat-checkbox [(ngModel)]="item.IsRight">Is Right?</mat-checkbox>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                        <mat-card-actions>
+                            <button mat-flat-button (click)="new()">New answer</button>
+                        </mat-card-actions>
+                    </mat-card>
+                </div>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-flat-button (click)="create()" [disabled]="!question || question.length == 0 || type == 0 
+                    || (type == 1 && (answers.length < 2 || checked(answers).length != 1 ))
+                    || (type == 2 && (answers.length < 2 || checked(answers).length == 0 ))">Create</button>
+                <button mat-flat-button routerLink="/">Back</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>

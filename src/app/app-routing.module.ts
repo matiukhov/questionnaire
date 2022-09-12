@@ -6,7 +6,7 @@ import { QuestionEditPageComponent } from './question-edit-page/question-edit-pa
 import { QuestionManagementPageComponent } from './question-management-page/question-management-page.component';
 
 const routes: Routes = [
-  { path: '', component: QuestionManagementPageComponent },
+  { path: '', component: QuestionManagementPageComponent, pathMatch: 'full' },
   { path: 'create', component: QuestionCreatePageComponent },
   { path: 'edit', component: QuestionEditPageComponent },
   { path: 'answer', component: QuestionAnswerPageComponent }
