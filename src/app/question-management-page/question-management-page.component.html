@@ -1,0 +1,36 @@
+<div>
+    <div>
+        <h2>Question Management Page</h2>
+    </div>
+    <div>
+        <button routerLink="create" mat-flat-button>Create</button>
+    </div>
+    <div *ngIf="data.Questions && data.Questions.length > 0; else noQuestions">
+        <table>
+            <thead>
+                <th>Question</th>
+                <th>Type</th>
+                <th>Create date</th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item in data.Questions">
+                    <td>{{item.Question}}</td>
+                    <td>{{item.Type}}</td>
+                    <td>{{item.Answer}}</td>
+                    <td>
+                        <div>
+                            <button (click)="edit(item)">Edit</button>
+                            <button (click)="delete(item)">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<ng-template #noQuestions>
+    <h3>
+        Create your first question!
+    </h3>
+</ng-template>
